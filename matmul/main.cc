@@ -1,5 +1,7 @@
 #ifdef MKL
 #include "mkl.h"
+#elif defined(MLAS)
+#include "mlas.h"
 #elif defined(BLASFEO)
 #include <blasfeo_s_blas_api.h>
 #elif defined(OPENBLAS) || defined(BLIS) || defined (ACCELERATE)
@@ -291,6 +293,8 @@ float *A, *B, *C;
 #if defined(MKL) || defined(OPENBLAS) || defined(BLIS) || defined(ACCELERATE)
     cblas_sgemm(MATRIX_FORMAT, CblasNoTrans, CblasNoTrans, MDIM, NDIM, KDIM, alpha,
                 A, LDA, B, LDB, beta, C, LDC);
+#elif defined(MLAS)
+    MlasGemm(CblasNoTrans, CblasNoTrans, MDIM, NDIM, KDIM, alpha, A, LDA, B, LDB, beta, C, LDC, nullptr);
 #elif defined(HALIDE)
 #if defined(COLUMN_MAJOR)
     hblas_sgemm(MATRIX_FORMAT, HblasNoTrans, HblasNoTrans, MDIM, NDIM, KDIM, alpha,
